@@ -107,7 +107,7 @@ p { margin: 0; }
 .section-head h2 { font-size: clamp(27px, 4vw, 38px); letter-spacing: -.03em; }
 .section-head p { margin-top: 4px; color: var(--muted); }
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 252px), 1fr)); gap: 15px; }
-.card, .calendar-panel, .day-panel {
+.card {
   min-width: 0; padding: 18px; border: 1px solid var(--rule); border-radius: 6px; background: #fff;
 }
 .empty { padding: 20px; border: 1px dashed var(--rule); border-radius: 5px; color: var(--muted); text-align: center; }
@@ -151,35 +151,50 @@ input::placeholder, textarea::placeholder { color: #6b675f; }
 #booksearch { max-width: 100%; }
 .notice { margin-top: 9px; color: var(--muted); font-size: 14px; }
 
-.calendar-wrap { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); gap: 16px; align-items: start; }
-.calendar-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
-.calendar-top h3 { font-size: clamp(20px, 3vw, 28px); text-align: center; text-transform: capitalize; }
-.calendar-top button { min-width: 37px; }
-.month-plan {
-  display: flex; align-items: center; justify-content: center; gap: 7px;
-  margin: 8px 0 12px; color: var(--accent); font-size: 15px;
-}
-.month-plan .ink-icon { --icon-size: 20px; }
-.calendar-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
-.weekday { padding: 6px 0; text-align: center; color: var(--muted); font: 600 11px/1.4 var(--sans); }
-.day {
-  display: flex; flex-direction: column; align-items: flex-start; min-width: 0; min-height: 67px;
-  padding: 5px; border: 1px solid var(--rule); border-radius: 4px; color: var(--ink); background: #fff;
-  position: relative; text-align: left;
-}
-.day:hover { background: var(--wash); }
-.day.outside { background: var(--wash); color: #69655d; }
-.day.selected { border-color: var(--accent); background: var(--accent-soft); }
-.day.today::after { content: ""; position: absolute; right: 6px; top: 7px; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
-.daynum { font: 12px/1.4 var(--sans); }
-.daybooks { width: 100%; margin-top: 5px; color: var(--muted); font-size: 11px; line-height: 1.15; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.day-panel h3 { margin-top: 6px; font-size: 25px; }
-.plan-item { padding: 10px 0; border-bottom: 1px solid var(--rule); }
-.plan-item small { display: block; margin-top: 2px; color: var(--muted); }
+.calendar-top { display: flex; justify-content: center; align-items: center; gap: 14px; margin-bottom: 16px; }
+.calendar-top h3 { min-width: 65px; font-size: 27px; text-align: center; }
+.calendar-top button { min-width: 38px; }
+.plan-form { display: grid; grid-template-columns: minmax(125px, .6fr) minmax(0, 1.4fr) auto; gap: 12px; align-items: end; margin-bottom: 18px; }
+.plan-form .btn { min-height: 44px; }
+.month-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.month-card { min-width: 0; }
+.month-card.current-month { border-color: var(--accent); }
+.month-heading { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+.month-heading h3 { font-size: 24px; }
+.month-count { display: inline-flex; align-items: center; gap: 5px; color: var(--accent); font-size: 14px; }
+.month-count .ink-icon { --icon-size: 17px; }
+.month-books { margin: 9px 0 0; padding-left: 19px; }
+.month-books li { padding: 5px 0; overflow-wrap: anywhere; }
+.month-book-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.month-book-row .quiet { min-height: 30px; padding: 3px 7px; font-size: 13px; }
+.month-empty { margin-top: 8px; font-size: 14px; }
+.cover-picker { display: none; }
 
 .review { padding: 10px 12px; margin: 8px 0; border-left: 2px solid var(--rule); overflow-wrap: anywhere; }
 .review strong { font-size: 20px; font-weight: 400; }
 .review p { color: var(--muted); line-height: 1.6; }
+.sticker-field { padding: 11px; border: 1px dashed var(--rule); border-radius: 5px; }
+.sticker-field .notice { margin: 0; }
+.sticker-field input { font: 14px var(--serif); }
+.sticker-tray { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 9px; }
+.sticker-tray:empty { display: none; }
+.sticker-preview, .sticker-thumb {
+  display: grid; position: relative; place-items: center; padding: 4px;
+  width: 76px; height: 76px; border: 1px solid var(--rule); border-radius: 9px;
+  background: var(--wash); color: var(--muted);
+}
+.sticker-preview img, .sticker-thumb img { width: 100%; height: 100%; object-fit: contain; }
+.sticker-preview, .sticker-thumb { grid-template: minmax(0, 1fr) / minmax(0, 1fr); }
+.sticker-thumb:hover:not(:disabled) { border-color: var(--accent); }
+.sticker-thumb img:not([hidden]) + .ink-icon { display: none; }
+.sticker-remove {
+  position: absolute; top: 2px; right: 2px; width: 25px; height: 25px; padding: 0;
+  border: 1px solid var(--rule); border-radius: 50%; color: var(--ink); background: var(--paper); line-height: 1;
+}
+.sticker-dialog { width: fit-content; max-width: min(760px, calc(100% - 24px)); }
+.sticker-dialog img {
+  display: block; width: auto; height: auto; max-width: 100%; max-height: 70vh; object-fit: contain;
+}
 .stars { color: #6d5226; letter-spacing: 2px; }
 .profile-head { display: flex; align-items: center; gap: 14px; }
 .avatar { display: grid; flex: 0 0 72px; place-items: center; width: 72px; height: 72px; border-radius: 50%; border: 1px solid var(--rule); overflow: hidden; background: var(--wash); }
@@ -188,6 +203,25 @@ input::placeholder, textarea::placeholder { color: #6b675f; }
 .reader-details { min-width: 0; overflow-wrap: anywhere; }
 .reader-details h3 { font-size: 24px; }
 .reader-details p { margin: 7px 0 0; white-space: pre-wrap; }
+.reader-details .quiet { margin-top: 10px; }
+.profile-banner {
+  display: flex; align-items: center; justify-content: center;
+  aspect-ratio: 4 / 1; min-height: 92px; overflow: hidden; border-radius: 4px;
+  background: var(--accent-soft); color: var(--accent); margin-bottom: 15px;
+}
+.profile-banner .ink-icon { --icon-size: 37px; }
+.profile-banner img { width: 100%; height: 100%; object-fit: cover; }
+.profile-banner img:not([hidden]) + .ink-icon { display: none; }
+.reader-dialog {
+  width: min(600px, calc(100% - 24px)); max-height: calc(100% - 30px);
+  border: 1px solid var(--rule); border-radius: 7px; padding: clamp(14px, 4vw, 25px);
+  background: var(--paper); color: var(--ink); overflow: auto;
+}
+.reader-dialog::backdrop { background: #1c201ab0; }
+.dialog-toolbar { display: flex; justify-content: flex-end; margin-bottom: 10px; }
+.reader-dialog .profile-head > div:last-child { min-width: 0; overflow-wrap: anywhere; }
+.reader-bio { margin: 14px 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+#followstatus:empty { display: none; }
 .timer { font-size: 40px; line-height: 1.2; font-variant-numeric: tabular-nums; }
 .progress { height: 6px; border-radius: 20px; background: var(--accent-soft); overflow: hidden; margin: 10px 0; }
 .progress i { display: block; height: 100%; background: var(--accent); }
@@ -203,7 +237,7 @@ input::placeholder, textarea::placeholder { color: #6b675f; }
 @media (max-width: 800px) {
   .hero { gap: 24px; }
   .nav { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-  .calendar-wrap { grid-template-columns: minmax(0, 1fr); }
+  .month-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 540px) {
   .shell { padding-top: 16px; }
@@ -216,9 +250,8 @@ input::placeholder, textarea::placeholder { color: #6b675f; }
   .nav button { min-height: 60px; font-size: 13px; }
   .nav .ink-icon { --icon-size: 28px; }
   .form { grid-template-columns: minmax(0, 1fr); }
-  .calendar-panel, .day-panel, .card { padding: 13px; }
-  .day { min-height: 52px; padding: 4px; }
-  .daybooks { font-size: 10px; }
+  .card { padding: 13px; }
+  .plan-form, .month-grid { grid-template-columns: minmax(0, 1fr); }
 }
 </style>
 </head>
@@ -253,23 +286,18 @@ input::placeholder, textarea::placeholder { color: #6b675f; }
 </section>
 
 <section id="calendar" class="view">
- <div class="section-head"><div><h2>Calendário literário</h2><p>Escolha um dia para descobrir ou programar as próximas leituras.</p></div></div>
- <div class="calendar-wrap">
-  <div class="calendar-panel">
-   <div class="calendar-top"><button class="quiet" id="calprev" aria-label="Mês anterior">‹</button><h3 id="calmonthlabel"></h3><button class="quiet" id="calnext" aria-label="Próximo mês">›</button></div>
-   <div class="month-plan" role="status"><span class="ink-icon ink-reading" aria-hidden="true"></span><span id="monthplancount"></span></div>
-   <div class="calendar-grid" id="calendargrid"></div>
-  </div>
-  <aside class="day-panel">
-   <div class="eyebrow">agenda de leitura</div><h3 id="selecteddaylabel">Escolha uma data</h3>
-   <div id="dayplans"></div>
-   <form id="planform" style="margin-top:18px">
-    <div class="field"><label>Livro para este dia</label><select id="planbook" required></select></div>
-    <button class="btn" style="margin-top:10px;width:100%"><span class="ink-icon ink-calendar" aria-hidden="true"></span>Costurar à agenda</button>
-   </form>
-   <p class="notice">As datas e os livros programados ficam visíveis para as duas pessoas.</p>
-  </aside>
+ <div class="section-head"><div><h2>Calendário literário</h2><p>Planejem as leituras do mês. A lista é compartilhada.</p></div></div>
+ <div class="calendar-top">
+  <button type="button" class="quiet" id="calprev" aria-label="Ano anterior">‹</button>
+  <h3 id="calyear" aria-live="polite"></h3>
+  <button type="button" class="quiet" id="calnext" aria-label="Próximo ano">›</button>
  </div>
+ <form id="planform" class="card plan-form">
+  <div class="field"><label for="planmonth">Mês da leitura</label><select id="planmonth" required></select></div>
+  <div class="field"><label for="planbook">Livro da estante</label><select id="planbook" required></select></div>
+  <button type="submit" class="btn" id="planadd"><span class="ink-icon ink-reading" aria-hidden="true"></span>Adicionar ao mês</button>
+ </form>
+ <div class="month-grid" id="calendargrid"></div>
 </section>
 
 <section id="shelf" class="view">
@@ -277,15 +305,17 @@ input::placeholder, textarea::placeholder { color: #6b675f; }
  <div id="addbookpanel" class="card hidden" style="margin-bottom:18px">
   <form id="bookform" class="form">
    <div class="field"><label>Título</label><input name="title" required></div><div class="field"><label>Autoria</label><input name="author"></div>
-   <div class="field"><label>Gênero / categoria</label><input name="genre" placeholder="Fantasia, clássico..."></div><div class="field"><label>URL da capa (opcional)</label><input name="cover_url" type="url"></div>
+   <div class="field"><label>Gênero / categoria</label><input name="genre" placeholder="Fantasia, clássico..."></div><div class="field"><label for="coverfile">Imagem da capa (opcional)</label><input id="coverfile" name="cover" type="file" accept="image/*"></div>
+   <div class="field"><label for="coverurl">Link alternativo da capa</label><input id="coverurl" name="cover_url" type="url"></div>
    <div class="field full"><label>Sinopse / observações</label><textarea name="description"></textarea></div>
    <div class="field"><label>Adicionar à lista</label><select name="status"><option value="want">Quero ler</option><option value="reading">Lendo</option><option value="read">Lido</option></select></div>
-   <div class="field"><label>Mês de referência</label><input name="month" type="month"></div>
+   <div class="field"><label for="bookmonth">Mês da leitura (opcional)</label><input id="bookmonth" name="month" type="month"></div>
    <div class="field full"><button class="btn">Guardar na estante</button></div>
   </form>
  </div>
  <div class="row" style="margin-bottom:15px"><input id="booksearch" class="quiet" placeholder="Buscar título ou autora..." style="min-width:230px"><select id="shelffilter" class="quiet"><option value="all">Todos os livros</option><option value="want">Quero ler</option><option value="reading">Lendo</option><option value="read">Lidos</option></select></div>
  <div id="books" class="grid"></div>
+ <input type="file" id="replacecover" class="cover-picker" accept="image/*" aria-label="Imagem da capa do livro">
 </section>
 
 <section id="diary" class="view">
@@ -297,7 +327,13 @@ input::placeholder, textarea::placeholder { color: #6b675f; }
    <div class="field"><label>Capítulo (se aplicável)</label><input name="chapter" placeholder="Ex.: Capítulo 4"></div>
    <div class="field"><label>Avaliação</label><select name="rating"><option value="">Sem avaliação</option><option value="1">★☆☆☆☆</option><option value="2">★★☆☆☆</option><option value="3">★★★☆☆</option><option value="4">★★★★☆</option><option value="5">★★★★★</option></select></div>
    <div class="field full"><label>O que você está achando?</label><textarea name="body" required placeholder="Registre aqui suas impressões, teorias, passagens favoritas..."></textarea></div>
-   <div class="field full"><button class="btn">Publicar anotação</button></div>
+   <div class="field full sticker-field">
+    <label for="reviewstickerfile">Adicionar figurinhas</label>
+    <input type="file" id="reviewstickerfile" accept="image/jpeg,image/png,image/webp,image/gif,image/avif" multiple aria-describedby="reviewstickerhint">
+    <p class="notice" id="reviewstickerhint">Até 4 imagens de 5 MB cada.</p>
+    <div id="reviewstickers" class="sticker-tray"></div>
+   </div>
+   <div class="field full"><button type="submit" id="reviewpublish" class="btn">Publicar anotação</button></div>
   </form>
  </div>
  <div id="reviews"></div>
@@ -336,12 +372,14 @@ input::placeholder, textarea::placeholder { color: #6b675f; }
 <section id="profile" class="view">
  <div class="section-head"><div><h2>Seu pequeno retrato</h2><p>Um espaço para cada leitora deixar sua marca.</p></div></div>
  <div class="card">
+  <div class="profile-banner" aria-hidden="true"><img id="myprofileheader" alt="" hidden><span class="ink-icon ink-button"></span></div>
   <div class="profile-head"><div class="avatar" id="avatar"><span class="ink-icon ink-button" aria-hidden="true"></span></div><div><h3 id="profilename" style="font-size:28px;margin:0">Leitora</h3><span id="profilehandle" class="muted"></span></div></div>
   <form id="profileform" class="form" style="margin-top:22px">
    <div class="field"><label>Nome</label><input name="display_name" required></div><div class="field"><label>Username</label><input name="username" placeholder="@seuuser"></div>
    <div class="field"><label>Pronomes</label><input name="pronouns" placeholder="Ex.: ela/dela"></div><div class="field"><label>Foto de perfil</label><input name="avatar" type="file" accept="image/*"></div>
+   <div class="field full"><label for="profileheaderfile">Imagem de cabeçalho (opcional)</label><input id="profileheaderfile" name="header" type="file" accept="image/jpeg,image/png,image/webp,image/gif,image/avif" aria-describedby="profileheaderhint"><p id="profileheaderhint" class="notice">Imagem horizontal de até 5 MB.</p></div>
    <div class="field full"><label>Biografia</label><textarea name="bio" placeholder="Conte um pouco sobre você e suas leituras..."></textarea></div>
-   <div class="field full"><button class="btn">Salvar perfil</button></div>
+   <div class="field full"><button type="submit" id="profilesave" class="btn">Salvar perfil</button></div>
   </form>
  </div>
 </section>
@@ -352,24 +390,48 @@ input::placeholder, textarea::placeholder { color: #6b675f; }
 </section>
 <footer class="footer">Biblioteca das Mellen · UMA BIBLIOTECA COMPARTILHADA</footer>
 </div>
-<div id="toast" class="toast hidden"></div>
+<dialog id="readerdialog" class="reader-dialog" aria-labelledby="readername">
+ <form method="dialog" class="dialog-toolbar"><button type="submit" class="quiet" autofocus>Fechar</button></form>
+ <div class="profile-banner" aria-hidden="true"><img id="readerheader" alt="" hidden><span class="ink-icon ink-button"></span></div>
+ <div class="profile-head">
+  <div id="readeravatar" class="avatar"></div>
+  <div><h2 id="readername"></h2><p id="readerdetails" class="muted"></p></div>
+ </div>
+ <p id="readerbio" class="muted reader-bio"></p>
+ <button type="button" id="followreader" class="btn" disabled>Seguir</button>
+ <p id="followstatus" class="notice" role="status"></p>
+</dialog>
+<dialog id="stickerdialog" class="reader-dialog sticker-dialog" aria-label="Figurinha do comentário">
+ <form method="dialog" class="dialog-toolbar"><button type="submit" class="quiet" autofocus>Fechar</button></form>
+ <img id="stickerlarge" alt="Figurinha do comentário">
+</dialog>
+<div id="toast" class="toast hidden" role="status"></div>
 <script>
 /* CONFIGURE A URL E A CHAVE ANON DO SEU PROJETO SUPABASE AQUI. */
 const SUPABASE_URL = "https://hsowtvzyewnclbfsuqze.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_45wnaO0AgiyIwtfGKiGZEg_VSsuKz70";
 const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 let currentUser=null, books=[], entries=[], reviews=[], profiles=[], files=[], activeSession=null, timerTick=null, activeView="home";
+const photoTypes=new Map([
+  ["image/jpeg","jpg"],["image/png","png"],["image/webp","webp"],["image/gif","gif"],["image/avif","avif"]
+]);
 const $=id=>document.getElementById(id);
 const escapeHTML=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const toast=m=>{ $("toast").textContent=m;$("toast").classList.remove("hidden");setTimeout(()=>$("toast").classList.add("hidden"),3200); };
-const monthName=(ym)=>{if(!ym)return "Sem mês";let [y,m]=ym.split("-");return new Date(+y,+m-1,1).toLocaleDateString("pt-BR",{month:"long"});};
-function showView(v){activeView=v;document.querySelectorAll(".view").forEach(x=>x.classList.toggle("active",x.id===v));document.querySelectorAll(".nav button").forEach(x=>x.classList.toggle("active",x.dataset.view===v));}
+const monthFormatter=new Intl.DateTimeFormat("pt-BR",{month:"long"});
+const monthKey=date=>`${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,"0")}`;
+const monthName=month=>{
+  const [year,number]=month.split("-").map(Number);
+  const name=monthFormatter.format(new Date(year,number-1,1));
+  return name[0].toLocaleUpperCase("pt-BR")+name.slice(1);
+};
+function showView(v){activeView=v;document.querySelectorAll(".view").forEach(x=>x.classList.toggle("active",x.id===v));document.querySelectorAll(".nav button").forEach(x=>x.classList.toggle("active",x.dataset.view===v));hydrateReviewStickers();}
 document.querySelectorAll("#nav button").forEach(b=>b.onclick=()=>showView(b.dataset.view));
 document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>showView(b.dataset.go));
 function statusLabel(s){return ({want:"Quero ler",reading:"Lendo",read:"Lido"})[s]||s;}
 function bookById(id){return books.find(b=>b.id===id);}
 function coverHTML(b){return b.cover_url?`<img src="${escapeHTML(b.cover_url)}" alt="">`:'<span class="ink-icon ink-reading" aria-hidden="true"></span>';}
-function bookCard(b, removable = false){let e=entries.find(x=>x.book_id===b.id);return `<article class="card book"><div class="cover">${coverHTML(b)}</div><div style="min-width:0;flex:1"><h3>${escapeHTML(b.title)}</h3><div class="author">${escapeHTML(b.author||"Autoria desconhecida")}</div><p>${escapeHTML((b.description||"").slice(0,105))}</p><span class="tag">${statusLabel(e?.status||"want")}</span><div class="row" style="margin-top:10px"><button class="quiet" onclick="changeStatus('${b.id}','reading')">Lendo</button><button class="quiet" onclick="changeStatus('${b.id}','read')">Lido</button>${removable ? `<button type="button" class="quiet book-remove" data-remove-book="${escapeHTML(b.id)}" aria-label="Remover ${escapeHTML(b.title)}">Remover</button>` : ""}</div></div></article>`;}
+function bookCard(b, removable = false){let e=entries.find(x=>x.book_id===b.id);return `<article class="card book"><div class="cover">${coverHTML(b)}</div><div style="min-width:0;flex:1"><h3>${escapeHTML(b.title)}</h3><div class="author">${escapeHTML(b.author||"Autoria desconhecida")}</div><p>${escapeHTML((b.description||"").slice(0,105))}</p><span class="tag">${statusLabel(e?.status||"want")}</span><div class="row" style="margin-top:10px"><button class="quiet" onclick="changeStatus('${b.id}','reading')">Lendo</button><button class="quiet" onclick="changeStatus('${b.id}','read')">Lido</button>${removable&&b.created_by===currentUser?.id ? `<button type="button" class="quiet" data-cover-book="${escapeHTML(b.id)}" aria-label="${b.cover_url?"Trocar":"Enviar"} capa de ${escapeHTML(b.title)}">${b.cover_url?"Trocar capa":"Enviar capa"}</button>` : ""}${removable ? `<button type="button" class="quiet book-remove" data-remove-book="${escapeHTML(b.id)}" aria-label="Remover ${escapeHTML(b.title)}">Remover</button>` : ""}</div></div></article>`;}
 async function loadAll(){
  const [br,er,rr,pr,fr]=await Promise.all([
   client.from("books").select("*").order("created_at",{ascending:false}),
@@ -397,6 +459,7 @@ function renderAll(){
  });
  renderCalendar();renderReviews();renderFiles();renderSessions();renderProfile();
  $("homereviews").innerHTML=reviews.slice(0,2).map(reviewHTML).join("")||'<span class="muted">As primeiras anotações aparecerão aqui.</span>';
+ hydrateReviewStickers();
 }
 function filteredBooks(){let q=$("booksearch").value.toLowerCase(),f=$("shelffilter").value;return books.filter(b=>(b.title+" "+(b.author||"")).toLowerCase().includes(q)&&(f==="all"||(entries.find(e=>e.book_id===b.id)?.status||"want")===f));}
 function renderShelf() {
@@ -406,6 +469,15 @@ $("booksearch").oninput=renderShelf;
 $("shelffilter").onchange=renderShelf;
 const removingBooks=new Set();
 $("books").onclick=async event=>{
+  const coverButton=event.target.closest("[data-cover-book]");
+  if(coverButton&&currentUser){
+    const picker=$("replacecover");
+    if(picker.disabled)return;
+    picker.value="";
+    picker.dataset.bookId=coverButton.dataset.coverBook;
+    picker.click();
+    return;
+  }
   const button=event.target.closest("[data-remove-book]");
   if(!button||!currentUser)return;
   const book=bookById(button.dataset.removeBook);
@@ -429,31 +501,314 @@ $("books").onclick=async event=>{
   }
 };
 $("addbooktoggle").onclick=()=>$("addbookpanel").classList.toggle("hidden");
-$("bookform").onsubmit=async e=>{e.preventDefault();let f=new FormData(e.target);let {data,error}=await client.from("books").insert({title:f.get("title"),author:f.get("author"),genre:f.get("genre"),cover_url:f.get("cover_url")||null,description:f.get("description"),created_by:currentUser.id}).select().single();if(error)return toast(error.message);let status=f.get("status"),month=f.get("month")||new Date().toISOString().slice(0,7);let r=await client.from("reading_entries").insert({book_id:data.id,user_id:currentUser.id,status,started_month:status==="reading"?month:null,finished_month:status==="read"?month:null});if(r.error)toast(r.error.message);else toast("Livro guardado na estante.");e.target.reset();await loadAll();};
-window.changeStatus=async(id,status)=>{let old=entries.find(e=>e.book_id===id&&e.user_id===currentUser.id);let month=new Date().toISOString().slice(0,7);let payload={book_id:id,user_id:currentUser.id,status,started_month:status==="reading"?(old?.started_month||month):old?.started_month,finished_month:status==="read"?month:null};let r=old?await client.from("reading_entries").update(payload).eq("id",old.id):await client.from("reading_entries").insert(payload);if(r.error)toast(r.error.message);else{toast("Estante atualizada.");await loadAll();}};
-let calendarDate=new Date();calendarDate.setDate(1);let selectedDate=dateKey(new Date());
-function dateKey(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;}
-function renderMonthPlan(month) {
-  const plannedBooks=new Set(entries
-    .filter(entry => entry.planned_date?.slice(0,7)===month && bookById(entry.book_id))
-    .map(entry => entry.book_id));
-  const count=plannedBooks.size;
-  $("monthplancount").textContent=count===1?"1 livro programado no mês":`${count} livros programados no mês`;
+async function uploadBookCover(file, userId) {
+  if(!file.type.startsWith("image/")||file.type==="image/svg+xml"){
+    return {error:{message:"Escolha uma imagem da capa, como JPG, PNG ou WebP."}};
+  }
+  const bucket=client.storage.from("avatars");
+  const suffix=file.name.match(/\.[a-z0-9]{1,8}$/i)?.[0]||"";
+  const path=`${userId}/cover-${Date.now()}-${Math.random().toString(36).slice(2,10)}${suffix}`;
+  const {error}=await bucket.upload(path,file);
+  if(error)return {error};
+  return {url:bucket.getPublicUrl(path).data.publicUrl,path,bucket};
 }
-function renderCalendar(){let y=calendarDate.getFullYear(),m=calendarDate.getMonth(),first=new Date(y,m,1),offset=(first.getDay()+6)%7,startDate=new Date(y,m,1-offset);$("calmonthlabel").textContent=first.toLocaleDateString("pt-BR",{month:"long",year:"numeric"});renderMonthPlan(dateKey(first).slice(0,7));let html=["seg","ter","qua","qui","sex","sáb","dom"].map(x=>`<div class="weekday">${x}</div>`).join("");for(let i=0;i<42;i++){let d=new Date(startDate);d.setDate(startDate.getDate()+i);let key=dateKey(d),plans=entries.filter(e=>e.planned_date===key),titles=plans.map(e=>bookById(e.book_id)?.title).filter(Boolean);html+=`<button class="day ${d.getMonth()!==m?"outside":""} ${key===selectedDate?"selected":""} ${key===dateKey(new Date())?"today":""}" onclick="selectCalendarDate('${key}')"><span class="daynum">${d.getDate()}</span>${titles.length?`<span class="daybooks">${escapeHTML(titles.slice(0,2).join(" · "))}${titles.length>2?" +"+(titles.length-2):""}</span>`:""}</button>`;}$("calendargrid").innerHTML=html;let opts=books.map(b=>`<option value="${b.id}">${escapeHTML(b.title)}</option>`).join("");$("planbook").innerHTML=opts||'<option value="">Adicione um livro à estante</option>';renderSelectedDay();}
-window.selectCalendarDate=key=>{selectedDate=key;let d=new Date(key+"T12:00:00");if(d.getMonth()!==calendarDate.getMonth()||d.getFullYear()!==calendarDate.getFullYear()){calendarDate=new Date(d.getFullYear(),d.getMonth(),1);}renderCalendar();};
-function renderSelectedDay(){let d=new Date(selectedDate+"T12:00:00");$("selecteddaylabel").textContent=d.toLocaleDateString("pt-BR",{weekday:"long",day:"numeric",month:"long"});let plans=entries.filter(e=>e.planned_date===selectedDate);$("dayplans").innerHTML=plans.map(e=>{let b=bookById(e.book_id);return `<div class="plan-item"><b>${escapeHTML(b?.title||"Livro")}</b><small>${escapeHTML(b?.author||"")} · ${statusLabel(e.status)}</small><button class="quiet" style="margin-top:7px;padding:5px 8px;font-size:10px" onclick="removePlan('${e.id}')">Remover da data</button></div>`}).join("")||'<div class="empty" style="padding:16px;margin-top:12px;font-size:17px">Nenhuma leitura marcada para este dia.</div>';}
-window.removePlan=async id=>{let r=await client.from("reading_entries").update({planned_date:null}).eq("id",id);if(r.error)return toast(r.error.message);await loadAll();};
-function moveCalendarMonth(offset) {
-  calendarDate.setMonth(calendarDate.getMonth()+offset);
-  selectedDate=dateKey(calendarDate);
+async function discardCover(cover) {
+  if(!cover?.path)return;
+  const {error}=await cover.bucket.remove([cover.path]);
+  if(error)console.warn("Capa sem vínculo",error);
+}
+$("replacecover").onchange=async event=>{
+  const picker=event.target;
+  const file=picker.files[0], userId=currentUser?.id, book=bookById(picker.dataset.bookId);
+  if(!file||!userId||book?.created_by!==userId)return;
+  picker.disabled=true;
+  try{
+    const cover=await uploadBookCover(file,userId);
+    if(cover.error)return toast(cover.error.message);
+    const {data,error}=await client.from("books").update({cover_url:cover.url})
+      .eq("id",book.id).eq("created_by",userId).select("id").maybeSingle();
+    if(error||!data){
+      if(!error||error.code)await discardCover(cover);
+      return toast(error?.message||"Sua conta não pode alterar a capa deste livro.");
+    }
+    await loadAll();
+    toast("Capa atualizada.");
+  }finally{
+    picker.value="";
+    picker.disabled=false;
+  }
+};
+let savingBook=false;
+$("bookform").onsubmit=async event=>{
+  event.preventDefault();
+  const userId=currentUser?.id;
+  if(!userId||savingBook)return;
+  const form=event.target, fields=new FormData(form), button=form.querySelector('button');
+  const file=fields.get("cover");
+  let cover;
+  savingBook=true;
+  button.disabled=true;
+  try{
+    if(file?.size){
+      cover=await uploadBookCover(file,userId);
+      if(cover.error)return toast(cover.error.message);
+    }
+    const {data,error}=await client.from("books").insert({
+      title:fields.get("title"), author:fields.get("author"), genre:fields.get("genre"),
+      cover_url:cover?.url||fields.get("cover_url")||null, description:fields.get("description"), created_by:userId
+    }).select().single();
+    if(error){
+      if(error.code)await discardCover(cover);
+      return toast(error.message);
+    }
+    const status=fields.get("status"), plannedMonth=fields.get("month"), referenceMonth=plannedMonth||monthKey(new Date());
+    const result=await client.from("reading_entries").insert({
+      book_id:data.id, user_id:userId, status, planned_date:plannedMonth?`${plannedMonth}-01`:null,
+      started_month:status==="reading"?referenceMonth:null, finished_month:status==="read"?referenceMonth:null
+    });
+    form.reset();
+    await loadAll();
+    toast(result.error?"Livro guardado. Não foi possível salvar a leitura inicial.":plannedMonth?"Livro guardado na estante e no calendário.":"Livro guardado na estante.");
+  }finally{
+    savingBook=false;
+    button.disabled=false;
+  }
+};
+window.changeStatus=async(id,status)=>{let old=entries.find(e=>e.book_id===id&&e.user_id===currentUser.id);let month=new Date().toISOString().slice(0,7);let payload={book_id:id,user_id:currentUser.id,status,started_month:status==="reading"?(old?.started_month||month):old?.started_month,finished_month:status==="read"?month:null};let r=old?await client.from("reading_entries").update(payload).eq("id",old.id):await client.from("reading_entries").insert(payload);if(r.error)toast(r.error.message);else{toast("Estante atualizada.");await loadAll();}};
+let calendarYear=new Date().getFullYear();
+let selectedMonth=monthKey(new Date());
+let savingPlan=false;
+function monthPlans() {
+  const plans=new Map();
+  const catalog=new Map(books.map(book=>[book.id,book]));
+  for(const entry of entries){
+    const month=entry.planned_date?.slice(0,7), book=catalog.get(entry.book_id);
+    if(!month||!book)continue;
+    if(!plans.has(month))plans.set(month,new Map());
+    const readings=plans.get(month);
+    if(!readings.has(book.id))readings.set(book.id,{book});
+    if(entry.user_id===currentUser?.id)readings.get(book.id).ownId=entry.id;
+  }
+  return plans;
+}
+function monthCard(month, plans, today) {
+  const list=plans.length?`<ul class="month-books">${plans.map(({book,ownId})=>`<li><div class="month-book-row">
+    <span>${escapeHTML(book.title)}</span>${ownId?`<button type="button" class="quiet" data-remove-plan="${escapeHTML(ownId)}" aria-label="Remover ${escapeHTML(book.title)} de ${monthName(month)}">Remover</button>`:""}
+  </div></li>`).join("")}</ul>`:'<p class="muted month-empty">Nenhum livro planejado.</p>';
+  return `<article class="card month-card${month===today?" current-month":""}" data-month="${month}">
+    <div class="month-heading"><h3>${monthName(month)}</h3>
+    <span class="month-count"><span class="ink-icon ink-reading" aria-hidden="true"></span>Livros a Ler: ${plans.length}</span></div>
+    ${list}
+  </article>`;
+}
+function renderCalendar(){
+  const months=Array.from({length:12},(_,index)=>monthKey(new Date(calendarYear,index,1)));
+  const plans=monthPlans(), today=monthKey(new Date());
+  $("calyear").textContent=String(calendarYear);
+  $("planmonth").innerHTML=months.map(month=>`<option value="${month}">${monthName(month)}</option>`).join("");
+  $("planmonth").value=selectedMonth;
+  $("calendargrid").innerHTML=months.map(month=>monthCard(month,Array.from(plans.get(month)?.values()||[]),today)).join("");
+  const bookSelect=$("planbook"), previousBook=bookSelect.value;
+  bookSelect.innerHTML='<option value="">'+(books.length?"Escolha um livro":"Adicione um livro à estante")+'</option>'+
+    books.map(book=>`<option value="${escapeHTML(book.id)}">${escapeHTML(book.title)}</option>`).join("");
+  bookSelect.value=bookById(previousBook)?previousBook:"";
+  $("planadd").disabled=savingPlan||!books.length;
+}
+function moveCalendarYear(offset){
+  calendarYear+=offset;
+  selectedMonth=`${calendarYear}-${selectedMonth.slice(-2)}`;
   renderCalendar();
 }
-$("calprev").onclick=()=>moveCalendarMonth(-1);
-$("calnext").onclick=()=>moveCalendarMonth(1);
-$("planform").onsubmit=async e=>{e.preventDefault();let book_id=$("planbook").value;if(!book_id)return toast("Adicione um livro primeiro.");let old=entries.find(x=>x.book_id===book_id&&x.user_id===currentUser.id);let payload={book_id,user_id:currentUser.id,status:old?.status||"want",started_month:old?.started_month||null,finished_month:old?.finished_month||null,planned_date:selectedDate};let r=await client.from("reading_entries").upsert(payload,{onConflict:"book_id,user_id"});if(r.error)return toast(r.error.message);toast("Leitura adicionada ao calendário.");await loadAll();};
-$("reviewform").onsubmit=async e=>{e.preventDefault();let f=new FormData(e.target);let r=await client.from("reviews").insert({book_id:f.get("book_id"),user_id:currentUser.id,kind:f.get("kind"),chapter:f.get("chapter"),rating:f.get("rating")?+f.get("rating"):null,body:f.get("body")});if(r.error)toast(r.error.message);else{toast("Anotação publicada.");e.target.reset();await loadAll();}};
-function reviewHTML(r){let author=r.profiles?.display_name||"Leitora",title=r.books?.title||bookById(r.book_id)?.title||"Livro";return `<div class="review"><div class="row" style="justify-content:space-between"><strong>${escapeHTML(title)}</strong><span class="stars">${r.rating?"★".repeat(r.rating)+"☆".repeat(5-r.rating):""}</span></div><div class="muted" style="font-size:10px;margin:4px 0">${escapeHTML(author)} · ${r.kind==="chapter"?"Capítulo "+escapeHTML(r.chapter||"não informado"):"Impressão geral"} · ${new Date(r.created_at).toLocaleDateString("pt-BR")}</div><p>${escapeHTML(r.body)}</p></div>`;}
+$("calprev").onclick=()=>moveCalendarYear(-1);
+$("calnext").onclick=()=>moveCalendarYear(1);
+$("planmonth").onchange=event=>{selectedMonth=event.target.value;};
+$("calendargrid").onclick=async event=>{
+  const button=event.target.closest("[data-remove-plan]");
+  if(!button||button.disabled||!currentUser)return;
+  const entry=entries.find(item=>item.id===button.dataset.removePlan&&item.user_id===currentUser.id);
+  if(!entry)return;
+  button.disabled=true;
+  try{
+    const {data,error}=await client.from("reading_entries").update({planned_date:null})
+      .eq("id",entry.id).eq("user_id",currentUser.id).eq("planned_date",entry.planned_date).select("id").maybeSingle();
+    await loadAll();
+    toast(error?.message||(data?"Seu agendamento foi removido.":"Esse agendamento já foi alterado."));
+  }finally{
+    button.disabled=false;
+  }
+};
+$("planform").onsubmit=async event=>{
+  event.preventDefault();
+  const user_id=currentUser?.id, book_id=$("planbook").value, month=$("planmonth").value;
+  if(!user_id||savingPlan||!bookById(book_id)||!/^\d{4}-(0[1-9]|1[0-2])$/.test(month))return;
+  const old=entries.find(entry=>entry.book_id===book_id&&entry.user_id===user_id);
+  const previous=old?.planned_date?.slice(0,7);
+  if(previous===month)return toast("Você já colocou este livro na lista desse mês.");
+  if(previous&&!window.confirm(`Mover seu agendamento de ${monthName(previous)} de ${previous.slice(0,4)} para ${monthName(month)} de ${month.slice(0,4)}?`))return;
+  const planned_date=`${month}-01`;
+  savingPlan=true;
+  $("planadd").disabled=true;
+  try{
+    const {data,error}=old
+      ?await client.from("reading_entries").update({planned_date}).eq("id",old.id).eq("user_id",user_id).select("id").maybeSingle()
+      :await client.from("reading_entries").insert({book_id,user_id,status:"want",planned_date}).select("id").single();
+    if(error||!data)return toast(error?.message||"Não foi possível programar este livro.");
+    $("planbook").value="";
+    await loadAll();
+    toast(`Livro adicionado às leituras de ${monthName(month).toLocaleLowerCase("pt-BR")}.`);
+  }finally{
+    savingPlan=false;
+    $("planadd").disabled=!books.length;
+  }
+};
+const stickerBucket="mellen-review-stickers";
+const selectedStickers=[];
+const stickerLinks=new Map();
+let publishingReview=false;
+
+function renderStickerPreviews(){
+  $("reviewstickers").innerHTML=selectedStickers.map(({file,url},index)=>`<div class="sticker-preview">
+    <img src="${escapeHTML(url)}" alt="${escapeHTML(file.name)}">
+    <button type="button" class="sticker-remove" data-sticker-index="${index}" aria-label="Remover figurinha ${index+1}" ${publishingReview?"disabled":""}>×</button>
+  </div>`).join("");
+}
+$("reviewstickerfile").onchange=event=>{
+  const input=event.target;
+  const files=Array.from(input.files);
+  input.value="";
+  if(!files.length||publishingReview)return;
+  if(selectedStickers.length+files.length>4)return toast("Adicione até 4 figurinhas por comentário.");
+  if(files.some(file=>!photoTypes.has(file.type)||file.size>5*1024*1024||!file.size)){
+    return toast("Escolha imagens JPG, PNG, WebP, GIF ou AVIF de até 5 MB.");
+  }
+  for(const file of files)selectedStickers.push({file,url:URL.createObjectURL(file)});
+  renderStickerPreviews();
+};
+$("reviewstickers").onclick=event=>{
+  const button=event.target.closest("[data-sticker-index]");
+  if(!button||publishingReview)return;
+  const [removed]=selectedStickers.splice(Number(button.dataset.stickerIndex),1);
+  if(removed)URL.revokeObjectURL(removed.url);
+  renderStickerPreviews();
+};
+function clearStickerPreviews(){
+  for(const {url} of selectedStickers)URL.revokeObjectURL(url);
+  selectedStickers.length=0;
+  renderStickerPreviews();
+}
+$("reviewform").onsubmit=async event=>{
+  event.preventDefault();
+  const userId=currentUser?.id;
+  if(!userId||publishingReview)return;
+  const form=event.target, fields=new FormData(form);
+  const payload={
+    book_id:fields.get("book_id"), user_id:userId, kind:fields.get("kind"), chapter:fields.get("chapter"),
+    rating:fields.get("rating")?Number(fields.get("rating")):null, body:fields.get("body")
+  };
+  const uploads=selectedStickers.map(({file})=>file);
+  const uploadedPaths=[];
+  const storage=uploads.length?client.storage.from(stickerBucket):null;
+  publishingReview=true;
+  $("reviewpublish").disabled=true;
+  $("reviewstickerfile").disabled=true;
+  renderStickerPreviews();
+  try{
+    for(const file of uploads){
+      const suffix=photoTypes.get(file.type);
+      const token=crypto.getRandomValues(new Uint32Array(2)).join("-");
+      const path=`${userId}/figurinha-${token}.${suffix}`;
+      const {error}=await storage.upload(path,file);
+      if(error){
+        if(uploadedPaths.length)await storage.remove(uploadedPaths);
+        return toast("Não foi possível enviar as figurinhas. "+error.message);
+      }
+      uploadedPaths.push(path);
+    }
+    if(uploadedPaths.length)payload.image_paths=uploadedPaths;
+    const {error}=await client.from("reviews").insert(payload);
+    if(error){
+      // Com erro confirmado do banco, descarte uploads sem vínculo.
+      if(uploadedPaths.length&&error.code)await storage.remove(uploadedPaths);
+      return toast("Não foi possível publicar a anotação. "+error.message);
+    }
+    form.reset();
+    clearStickerPreviews();
+    if(currentUser?.id===userId)await loadAll();
+    toast("Anotação publicada.");
+  }finally{
+    publishingReview=false;
+    $("reviewpublish").disabled=false;
+    $("reviewstickerfile").disabled=false;
+    renderStickerPreviews();
+  }
+};
+
+function reviewStickers(paths){
+  if(!paths?.length)return "";
+  return `<div class="sticker-tray">${paths.map((path,index)=>`<button type="button" class="sticker-thumb" data-sticker-path="${escapeHTML(path)}" aria-label="Ampliar figurinha ${index+1}" disabled>
+    <img alt="" hidden><span class="ink-icon ink-reading" aria-hidden="true"></span>
+  </button>`).join("")}</div>`;
+}
+function stickerLink(path){
+  const cached=stickerLinks.get(path);
+  if(cached&&cached.expiresAt>Date.now())return cached.promise;
+  const entry={
+    expiresAt:Date.now()+240000,
+    promise:client.storage.from(stickerBucket).createSignedUrl(path,300)
+  };
+  stickerLinks.set(path,entry);
+  return entry.promise.then(result=>{
+    if(result.error&&stickerLinks.get(path)===entry)stickerLinks.delete(path);
+    return result;
+  });
+}
+async function showStickerThumb(button){
+  const {data,error}=await stickerLink(button.dataset.stickerPath);
+  if(!button.isConnected)return;
+  if(error||!data?.signedUrl){
+    button.setAttribute("aria-label","Figurinha indisponível");
+    button.title="Figurinha indisponível";
+    return;
+  }
+  const image=button.querySelector("img");
+  image.onerror=()=>{
+    image.hidden=true;
+    button.disabled=true;
+    button.setAttribute("aria-label","Figurinha indisponível");
+  };
+  image.src=data.signedUrl;
+  image.hidden=false;
+  button.disabled=false;
+}
+const stickerObserver=typeof IntersectionObserver==="undefined"?null:new IntersectionObserver(entries=>{
+  for(const entry of entries){
+    if(!entry.isIntersecting)continue;
+    stickerObserver.unobserve(entry.target);
+    showStickerThumb(entry.target);
+  }
+},{rootMargin:"120px"});
+function hydrateReviewStickers(){
+  stickerObserver?.disconnect();
+  const list=activeView==="diary"?$("reviews"):activeView==="home"?$("homereviews"):null;
+  for(const button of list?.querySelectorAll("button[data-sticker-path]:disabled")||[]){
+    if(stickerObserver)stickerObserver.observe(button);
+    else showStickerThumb(button);
+  }
+}
+async function openReviewSticker(event){
+  const button=event.target.closest("[data-sticker-path]");
+  if(!button||button.disabled||!currentUser)return;
+  const userId=currentUser.id;
+  const {data,error}=await stickerLink(button.dataset.stickerPath);
+  if(currentUser?.id!==userId||!button.isConnected)return;
+  if(error||!data?.signedUrl)return toast("Não foi possível abrir a figurinha.");
+  $("stickerlarge").src=data.signedUrl;
+  if(!$("stickerdialog").open)$("stickerdialog").showModal();
+}
+$("reviews").onclick=openReviewSticker;
+$("homereviews").onclick=openReviewSticker;
+$("stickerdialog").onclose=()=>$("stickerlarge").removeAttribute("src");
+function reviewHTML(r){let author=r.profiles?.display_name||"Leitora",title=r.books?.title||bookById(r.book_id)?.title||"Livro";return `<div class="review"><div class="row" style="justify-content:space-between"><strong>${escapeHTML(title)}</strong><span class="stars">${r.rating?"★".repeat(r.rating)+"☆".repeat(5-r.rating):""}</span></div><div class="muted" style="font-size:10px;margin:4px 0">${escapeHTML(author)} · ${r.kind==="chapter"?"Capítulo "+escapeHTML(r.chapter||"não informado"):"Impressão geral"} · ${new Date(r.created_at).toLocaleDateString("pt-BR")}</div><p>${escapeHTML(r.body)}</p>${reviewStickers(r.image_paths)}</div>`;}
 function renderReviews(){$("reviews").innerHTML=reviews.map(reviewHTML).join("")||'<div class="empty">O diário ainda está em branco.</div>';}
 let timerStart=null,elapsed=0,sessionId=null;
 function fmt(s){s=Math.max(0,Math.floor(s));return [Math.floor(s/3600),Math.floor(s%3600/60),s%60].map(n=>String(n).padStart(2,"0")).join(":");}
@@ -470,8 +825,157 @@ $("uploadform").onsubmit=async e=>{e.preventDefault();let file=$("bookfile").fil
 function profileAvatar(url) {
   return url ? `<img src="${escapeHTML(url)}" alt="">` : '<span class="ink-icon ink-button" aria-hidden="true"></span>';
 }
-function renderProfile(){let p=profiles.find(x=>x.id===currentUser.id);$("profilename").textContent=p?.display_name||"Sua leitora";$("profilehandle").textContent=(p?.username?"@"+p.username+" · ":"")+(p?.pronouns||"");$("avatar").innerHTML=profileAvatar(p?.avatar_url);let f=$("profileform");["display_name","username","pronouns","bio"].forEach(k=>f.elements[k].value=p?.[k]||"");}
-$("profileform").onsubmit=async e=>{e.preventDefault();let f=e.target,avatar_url=profiles.find(x=>x.id===currentUser.id)?.avatar_url,file=f.elements.avatar.files[0];if(file){let path=`${currentUser.id}/avatar-${Date.now()}`;let up=await client.storage.from("avatars").upload(path,file,{upsert:true});if(up.error)return toast(up.error.message);let {data}=client.storage.from("avatars").getPublicUrl(path);avatar_url=data.publicUrl;}let payload={id:currentUser.id,display_name:f.elements.display_name.value,username:f.elements.username.value,pronouns:f.elements.pronouns.value,bio:f.elements.bio.value,avatar_url};let r=await client.from("profiles").upsert(payload);if(r.error)return toast(r.error.message);toast("Perfil atualizado.");await loadAll();};
+const profileHeaderBucket="mellen-profile-headers";
+let openedReader=null;
+const followWrites=new Map();
+let savingProfile=false;
+function profileDetails(profile){
+  const username=profile?.username?.trim().replace(/^@+/,"");
+  return [username&&"@"+username,profile?.pronouns].filter(Boolean).join(" · ");
+}
+async function showProfileHeader(image,path){
+  if((path||"")===image.dataset.headerPath)return;
+  image.dataset.headerPath=path||"";
+  image.hidden=true;
+  image.removeAttribute("src");
+  if(!path)return;
+  const {data,error}=await client.storage.from(profileHeaderBucket).createSignedUrl(path,300);
+  if(image.dataset.headerPath!==path)return;
+  if(error||!data?.signedUrl){
+    delete image.dataset.headerPath;
+    return;
+  }
+  image.src=data.signedUrl;
+  image.hidden=false;
+}
+function renderProfile(){
+  const profile=profiles.find(item=>item.id===currentUser.id);
+  $("profilename").textContent=profile?.display_name||"Sua leitora";
+  $("profilehandle").textContent=profileDetails(profile);
+  $("avatar").innerHTML=profileAvatar(profile?.avatar_url);
+  showProfileHeader($("myprofileheader"),profile?.header_path);
+  const form=$("profileform");
+  if(form.contains(document.activeElement)&&!savingProfile)return;
+  for(const field of ["display_name","username","pronouns","bio"]){
+    form.elements[field].value=profile?.[field]||"";
+  }
+}
+$("profileform").onsubmit=async event=>{
+  event.preventDefault();
+  const userId=currentUser?.id;
+  if(!userId||savingProfile)return;
+  const form=event.target, fields=form.elements;
+  const current=profiles.find(profile=>profile.id===userId);
+  const avatarFile=fields.avatar.files[0], headerFile=fields.header.files[0];
+  const headerExtension=photoTypes.get(headerFile?.type);
+  if(headerFile&&(!headerExtension||headerFile.size>5*1024*1024)){
+    return toast("Escolha uma imagem JPG, PNG, WebP, GIF ou AVIF de até 5 MB.");
+  }
+  const payload={
+    id:userId, display_name:fields.display_name.value, username:fields.username.value,
+    pronouns:fields.pronouns.value, bio:fields.bio.value
+  };
+  let headerBucket, headerPath;
+  savingProfile=true;
+  $("profilesave").disabled=true;
+  try{
+    if(headerFile){
+      headerBucket=client.storage.from(profileHeaderBucket);
+      headerPath=`${userId}/header-${crypto.getRandomValues(new Uint32Array(2)).join("-")}.${headerExtension}`;
+      const {error}=await headerBucket.upload(headerPath,headerFile);
+      if(error)return toast("Não foi possível enviar o cabeçalho. "+error.message);
+      payload.header_path=headerPath;
+    }
+    if(avatarFile){
+      const avatars=client.storage.from("avatars"), path=`${userId}/avatar-${Date.now()}`;
+      const {error}=await avatars.upload(path,avatarFile,{upsert:true});
+      if(error){
+        if(headerPath)await headerBucket.remove([headerPath]);
+        return toast(error.message);
+      }
+      payload.avatar_url=avatars.getPublicUrl(path).data.publicUrl;
+    }
+    const {id,...changes}=payload;
+    const profileTable=client.from("profiles");
+    const {data,error}=current
+      ?await profileTable.update(changes).eq("id",id).select("id").maybeSingle()
+      :await profileTable.upsert(payload).select("id").single();
+    if(error||!data){
+      if(headerPath&&(!error||error.code))await headerBucket.remove([headerPath]);
+      return toast(error?.message||"Não foi possível salvar seu perfil.");
+    }
+    if(headerPath&&current?.header_path?.startsWith(userId+"/")){
+      await headerBucket.remove([current.header_path]);
+    }
+    fields.avatar.value="";
+    fields.header.value="";
+    await loadAll();
+    toast("Perfil atualizado.");
+  }finally{
+    savingProfile=false;
+    $("profilesave").disabled=false;
+  }
+};
+function setFollowState(reader, message=""){
+  if(openedReader!==reader)return;
+  const button=$("followreader");
+  button.textContent=reader.following?"Deixar de seguir":"Seguir";
+  button.disabled=reader.following===null||reader.pending;
+  $("followstatus").textContent=message;
+}
+$("profiles").onclick=async event=>{
+  const button=event.target.closest("[data-open-profile]");
+  if(!button||!currentUser)return;
+  const profile=profiles.find(item=>item.id===button.dataset.openProfile&&item.id!==currentUser.id);
+  if(!profile)return;
+  const reader={id:profile.id,userId:currentUser.id,following:null,pending:false};
+  openedReader=reader;
+  $("readername").textContent=profile.display_name||"Leitora";
+  $("readerdetails").textContent=profileDetails(profile);
+  $("readerbio").textContent=profile.bio||"";
+  $("readerbio").hidden=!profile.bio;
+  $("readeravatar").innerHTML=profileAvatar(profile.avatar_url);
+  showProfileHeader($("readerheader"),profile.header_path);
+  setFollowState(reader,"Carregando…");
+  $("readerdialog").showModal();
+  await followWrites.get(reader.userId+":"+reader.id);
+  if(openedReader!==reader)return;
+  const {data,error}=await client.from("profile_follows").select("followed_id")
+    .eq("follower_id",reader.userId).eq("followed_id",reader.id).maybeSingle();
+  if(error)return setFollowState(reader,"A opção de seguir está indisponível.");
+  reader.following=Boolean(data);
+  setFollowState(reader,reader.following?"Você segue este perfil.":"");
+};
+$("readerdialog").onclose=()=>{
+  if($("readerdialog").open)return;
+  openedReader=null;
+  showProfileHeader($("readerheader"),null);
+};
+$("followreader").onclick=async()=>{
+  const reader=openedReader;
+  if(!reader||reader.pending||reader.following===null||reader.userId!==currentUser?.id)return;
+  reader.pending=true;
+  setFollowState(reader);
+  const key=reader.userId+":"+reader.id;
+  const table=client.from("profile_follows");
+  const query=reader.following
+    ?table.delete().eq("follower_id",reader.userId).eq("followed_id",reader.id)
+    :table.insert({follower_id:reader.userId,followed_id:reader.id});
+  const write=Promise.resolve(query);
+  followWrites.set(key,write);
+  try{
+    const {error}=await write;
+    if(error&&(reader.following||error.code!=="23505")){
+      return setFollowState(reader,"Não foi possível atualizar. Tente novamente.");
+    }
+    reader.following=!reader.following;
+    setFollowState(reader,reader.following?"Você segue este perfil.":"Você deixou de seguir este perfil.");
+  }finally{
+    followWrites.delete(key);
+    reader.pending=false;
+    if(openedReader===reader)setFollowState(reader,$("followstatus").textContent);
+  }
+};
 function renderReaders(error) {
   if(error){
     $("profiles").innerHTML='<div class="empty">Não foi possível carregar os perfis.</div>';
@@ -479,14 +983,13 @@ function renderReaders(error) {
   }
   const otherProfiles=profiles.filter(profile => profile.id!==currentUser.id);
   $("profiles").innerHTML=otherProfiles.map(profile=>{
-    const username=profile.username?.trim().replace(/^@+/,"");
-    const details=[username && "@"+username,profile.pronouns].filter(Boolean).join(" · ");
+    const details=profileDetails(profile);
     return `<article class="card profile-head reader-card">
       <div class="avatar">${profileAvatar(profile.avatar_url)}</div>
       <div class="reader-details">
         <h3>${escapeHTML(profile.display_name||"Leitora")}</h3>
         ${details ? `<span class="muted">${escapeHTML(details)}</span>` : ""}
-        ${profile.bio ? `<p class="muted">${escapeHTML(profile.bio)}</p>` : ""}
+        <button type="button" class="quiet" data-open-profile="${escapeHTML(profile.id)}" aria-label="Abrir perfil de ${escapeHTML(profile.display_name||"Leitora")}">Abrir perfil</button>
       </div>
     </article>`;
   }).join("")||'<div class="empty">Nenhum outro perfil disponível por enquanto.</div>';
@@ -494,7 +997,7 @@ function renderReaders(error) {
 async function enter(user){currentUser=user;$("login").classList.add("hidden");$("app").classList.remove("hidden");await client.from("profiles").upsert({id:user.id,display_name:user.email?.split("@")[0]||"Leitora"},{onConflict:"id",ignoreDuplicates:true});await loadAll();await restoreTimer();if(window.refugioChannel)client.removeChannel(window.refugioChannel);window.refugioChannel=client.channel("refugio-compartilhado");["books","reading_entries","reviews","profiles","book_files"].forEach(table=>{window.refugioChannel=window.refugioChannel.on("postgres_changes",{event:"*",schema:"public",table},()=>{if(currentUser)loadAll();});});window.refugioChannel.subscribe();}
 $("signin").onclick=async()=>{let {data,error}=await client.auth.signInWithPassword({email:$("email").value,password:$("password").value});$("authmsg").textContent=error?.message||"";if(data.user)await enter(data.user);};
 $("signup").onclick=async()=>{let {data,error}=await client.auth.signUp({email:$("email").value,password:$("password").value});$("authmsg").textContent=error?.message||(data.session?"Conta criada.":"Conta criada. Verifique seu e-mail para confirmar o cadastro.");if(data.session&&data.user)await enter(data.user);};
-$("logout").onclick=async()=>{if(timerStart)$("pausetimer").click();await client.auth.signOut();currentUser=null;$("app").classList.add("hidden");$("login").classList.remove("hidden");};
+$("logout").onclick=async()=>{if(timerStart)$("pausetimer").click();await client.auth.signOut();currentUser=null;clearStickerPreviews();stickerLinks.clear();if($("stickerdialog").open)$("stickerdialog").close();if($("readerdialog").open)$("readerdialog").close();showProfileHeader($("myprofileheader"),null);$("app").classList.add("hidden");$("login").classList.remove("hidden");};
 client.auth.onAuthStateChange((_event,session)=>{if(session?.user&&!currentUser)enter(session.user);});
 (async()=>{if(SUPABASE_URL.startsWith("http")&&(SUPABASE_ANON_KEY.startsWith("ey")||SUPABASE_ANON_KEY.startsWith("sb_publishable_"))){let {data}=await client.auth.getSession();if(data.session)await enter(data.session.user);}})();
 </script>
