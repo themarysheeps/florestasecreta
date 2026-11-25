@@ -156,13 +156,32 @@ input::placeholder, textarea::placeholder { color: #6b675f; }
 .calendar-top button { min-width: 38px; }
 .plan-form { display: grid; grid-template-columns: minmax(125px, .6fr) minmax(0, 1.4fr) auto; gap: 12px; align-items: end; margin-bottom: 18px; }
 .plan-form .btn { min-height: 44px; }
-.month-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.month-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; align-items: start; }
 .month-card { min-width: 0; }
 .month-card.current-month { border-color: var(--accent); }
 .month-heading { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
 .month-heading h3 { font-size: 24px; }
-.month-count { display: inline-flex; align-items: center; gap: 5px; color: var(--accent); font-size: 14px; }
-.month-count .ink-icon { --icon-size: 17px; }
+.month-days { width: 100%; margin: 10px 0 9px; border-collapse: collapse; table-layout: fixed; text-align: center; }
+.month-days th { height: 24px; color: var(--muted); font: 600 10px/1.2 var(--sans); }
+.month-days td { padding: 1px; height: 27px; border: 1px solid var(--rule); font: 12px/1.2 var(--sans); }
+.month-days td:empty { background: var(--wash); }
+.month-day-today {
+  display: inline-grid; place-items: center; width: 22px; height: 22px;
+  max-width: 100%; border-radius: 50%; background: var(--accent); color: #fff;
+}
+.month-summary {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  padding: 8px 10px; min-height: 40px; border: 1px solid var(--rule); border-radius: 4px;
+  background: var(--wash); color: var(--accent); font-size: 15px; cursor: pointer; list-style: none;
+}
+.month-summary::-webkit-details-marker { display: none; }
+.month-summary::after {
+  content: ""; flex: none; width: 7px; height: 7px; margin-right: 2px;
+  border: solid currentColor; border-width: 0 1.5px 1.5px 0; transform: translateY(-2px) rotate(45deg);
+}
+.month-summary:hover, .month-plan[open] .month-summary { background: var(--accent-soft); }
+.month-summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.month-plan[open] .month-summary::after { transform: translateY(2px) rotate(225deg); }
 .month-books { margin: 9px 0 0; padding-left: 19px; }
 .month-books li { padding: 5px 0; overflow-wrap: anywhere; }
 .month-book-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
@@ -591,23 +610,52 @@ function monthPlans() {
   }
   return plans;
 }
-function monthCard(month, plans, today) {
+const calendarWeekdays=[
+  ["Seg","Segunda-feira"],["Ter","Terça-feira"],["Qua","Quarta-feira"],["Qui","Quinta-feira"],
+  ["Sex","Sexta-feira"],["Sáb","Sábado"],["Dom","Domingo"]
+];
+function monthDays(month, today) {
+  const [year,number]=month.split("-").map(Number);
+  const first=new Date(year,number-1,1);
+  const offset=(first.getDay()+6)%7;
+  const lastDay=new Date(year,number,0).getDate();
+  const weekdays=calendarWeekdays.map(([short,full])=>`<th scope="col" aria-label="${full}">${short}</th>`).join("");
+  const weeks=Array.from({length:6},(_,week)=>{
+    const days=calendarWeekdays.map((_,weekday)=>{
+      const day=week*7+weekday-offset+1;
+      if(day<1||day>lastDay)return "<td></td>";
+      if(month===today.month&&day===today.day)return `<td><span class="month-day-today" aria-current="date">${day}</span></td>`;
+      return `<td>${day}</td>`;
+    });
+    return `<tr>${days.join("")}</tr>`;
+  });
+  return `<table class="month-days" aria-label="Calendário de ${monthName(month)} de ${year}">
+    <thead><tr>${weekdays}</tr></thead><tbody>${weeks.join("")}</tbody>
+  </table>`;
+}
+function monthCard(month, plans, today, expanded) {
   const list=plans.length?`<ul class="month-books">${plans.map(({book,ownId})=>`<li><div class="month-book-row">
     <span>${escapeHTML(book.title)}</span>${ownId?`<button type="button" class="quiet" data-remove-plan="${escapeHTML(ownId)}" aria-label="Remover ${escapeHTML(book.title)} de ${monthName(month)}">Remover</button>`:""}
   </div></li>`).join("")}</ul>`:'<p class="muted month-empty">Nenhum livro planejado.</p>';
-  return `<article class="card month-card${month===today?" current-month":""}" data-month="${month}">
-    <div class="month-heading"><h3>${monthName(month)}</h3>
-    <span class="month-count"><span class="ink-icon ink-reading" aria-hidden="true"></span>Livros a Ler: ${plans.length}</span></div>
-    ${list}
+  const count=`${plans.length} ${plans.length===1?"livro":"livros"} este mês`;
+  return `<article class="card month-card${month===today.month?" current-month":""}" data-month="${month}">
+    <div class="month-heading"><h3>${monthName(month)}</h3></div>
+    ${monthDays(month,today)}
+    <details class="month-plan" data-plan-month="${month}"${expanded?" open":""}>
+      <summary class="month-summary" aria-label="${monthName(month)}: ${count}">${count}</summary>
+      ${list}
+    </details>
   </article>`;
 }
 function renderCalendar(){
   const months=Array.from({length:12},(_,index)=>monthKey(new Date(calendarYear,index,1)));
-  const plans=monthPlans(), today=monthKey(new Date());
+  const plans=monthPlans(), now=new Date(), today={month:monthKey(now),day:now.getDate()};
+  const grid=$("calendargrid");
+  const expanded=new Set(Array.from(grid.querySelectorAll(".month-plan[open]"),details=>details.dataset.planMonth));
   $("calyear").textContent=String(calendarYear);
   $("planmonth").innerHTML=months.map(month=>`<option value="${month}">${monthName(month)}</option>`).join("");
   $("planmonth").value=selectedMonth;
-  $("calendargrid").innerHTML=months.map(month=>monthCard(month,Array.from(plans.get(month)?.values()||[]),today)).join("");
+  grid.innerHTML=months.map(month=>monthCard(month,Array.from(plans.get(month)?.values()||[]),today,expanded.has(month))).join("");
   const bookSelect=$("planbook"), previousBook=bookSelect.value;
   bookSelect.innerHTML='<option value="">'+(books.length?"Escolha um livro":"Adicione um livro à estante")+'</option>'+
     books.map(book=>`<option value="${escapeHTML(book.id)}">${escapeHTML(book.title)}</option>`).join("");
