@@ -158,8 +158,8 @@ button,input,textarea,select{font:inherit}button{cursor:pointer}.shell{max-width
 <div id="toast" class="toast hidden"></div>
 <script>
 /* CONFIGURE A URL E A CHAVE ANON DO SEU PROJETO SUPABASE AQUI. */
-const SUPABASE_URL = "COLE_A_URL_DO_SEU_PROJETO";
-const SUPABASE_ANON_KEY = "COLE_SUA_CHAVE_ANON_PUBLICA";
+const SUPABASE_URL = "https://hsowtvzyewnclbfsuqze.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_45wnaO0AgiyIwtfGKiGZEg_VSsuKz70";
 const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 let currentUser=null, books=[], entries=[], reviews=[], profiles=[], files=[], music=[], activeSession=null, timerTick=null, activeView="home";
 const $=id=>document.getElementById(id);
@@ -238,7 +238,7 @@ $("signin").onclick=async()=>{let {data,error}=await client.auth.signInWithPassw
 $("signup").onclick=async()=>{let {data,error}=await client.auth.signUp({email:$("email").value,password:$("password").value});$("authmsg").textContent=error?.message||(data.session?"Conta criada.":"Conta criada. Verifique seu e-mail para confirmar o cadastro.");if(data.session&&data.user)await enter(data.user);};
 $("logout").onclick=async()=>{if(timerStart)$("pausetimer").click();await client.auth.signOut();currentUser=null;$("app").classList.add("hidden");$("login").classList.remove("hidden");};
 client.auth.onAuthStateChange((_event,session)=>{if(session?.user&&!currentUser)enter(session.user);});
-(async()=>{makeRain();if(SUPABASE_URL.startsWith("http")&&SUPABASE_ANON_KEY.startsWith("ey")){let {data}=await client.auth.getSession();if(data.session)await enter(data.session.user);}})();
+(async()=>{makeRain();if(SUPABASE_URL.startsWith("http")&&(SUPABASE_ANON_KEY.startsWith("ey")||SUPABASE_ANON_KEY.startsWith("sb_publishable_"))){let {data}=await client.auth.getSession();if(data.session)await enter(data.session.user);}})();
 </script>
 </body>
 </html>
